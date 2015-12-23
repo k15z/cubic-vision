@@ -37,7 +37,7 @@ public class Controller {
 	 * This method moves the mouse and clicks on the New Game button. The class
 	 * should be calibrated before this method is called.
 	 */
-	public void start() {
+	public void click() {
 		robot.mouseMove(region.x+region.width/3, region.y+5*region.height/12);
 		for (int _ = 0; _ < 2; _++) {
 			robot.mousePress(InputEvent.BUTTON1_DOWN_MASK);
@@ -66,11 +66,42 @@ public class Controller {
 				value += (c.getGreen() > BLOCK_RGB) ? 1 : 0;
 				if (value == 1 || value == 2)
 					data[x][y] = 1;
+				if (y == GAME_HEIGHT*5/12)
+					if (x == GAME_WIDTH*2/3)
+						if (value == 0) {
+							System.out.println("Game over...");
+							System.out.println("Restarting...");
+							click();
+						}
 			}
 		}
 		return data;
 	}
 
+	/**
+	 * Release left/right key.
+	 */
+	public void stop() {
+		robot.keyRelease(KeyEvent.VK_LEFT);
+		robot.keyRelease(KeyEvent.VK_RIGHT);
+	}
+	
+	/**
+	 * Switch to holding left key.
+	 */
+	public void left() {
+		robot.keyRelease(KeyEvent.VK_RIGHT);
+		robot.keyPress(KeyEvent.VK_LEFT);
+	}
+	
+	/**
+	 * Switch to holding right key.
+	 */
+	public void right() {
+		robot.keyRelease(KeyEvent.VK_LEFT);
+		robot.keyPress(KeyEvent.VK_RIGHT);
+	}
+	
 	/**
 	 * @param duration of time to hold the left key
 	 */

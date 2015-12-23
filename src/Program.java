@@ -21,15 +21,15 @@ public class Program {
 			Agent a = new BasicAgent(c);
 
 			System.out.println("Let the games begin...");
-			c.start();
+			c.click();
 			while (true)
 				a.move();
 		} catch (AWTException e) {
-			System.out.println("ERROR: java.awt.Robot is disabled.");
+			System.out.println("ERROR: java.awt.Robot is not enabled.");
 		} catch (IllegalStateException e) {
 			System.out.println("ERROR: CubeRunner window not found.");
 		} catch (InterruptedException e) {
-			System.out.println("ERROR: This is bizarre.");
+			System.out.println("ERROR: This is a bizarre error.");
 		}
 	}
 }

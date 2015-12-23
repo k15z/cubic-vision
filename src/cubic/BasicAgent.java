@@ -12,32 +12,28 @@ public class BasicAgent extends Agent {
 
 	public void move() {
 		int[][] data = controller.state();
+		
 		int[] h_sum = new int[WIDTH];
 		for (int x = 0; x < WIDTH; x++)
 			for (int y = 0; y < HEIGHT; y++)
-				h_sum[x] += data[x][y] * y * y;
-		for (int dx = -3; dx <= 3; dx++)
-			if (h_sum[WIDTH/2 + dx] > 50) {
-				makeMove(h_sum);
-				return;
-			}
-	}
-
-	private void makeMove(int[] h_sum) {
-		int best_dx = 0;
-		int best_sum = 99999;
-		for (int dx = -15; dx <= 15; dx++) {
-			int sum = 0;
-			for (int ax = -3; ax <= 3; ax++)
-				sum += h_sum[WIDTH/2+dx+ax];
-			if (sum < best_sum) {
-				best_dx = dx;
-				best_sum = sum;
+				if (data[x][y] > 0)
+					h_sum[x] = y;
+		
+		if (h_sum[WIDTH/2] <= 35 && h_sum[WIDTH/2 - 1] <= 35 && h_sum[WIDTH/2 + 1] <= 35)
+			controller.stop();
+		else {
+			for (int dx = 2; dx < 4; dx++) {
+				int left_val = h_sum[WIDTH/2 - dx] + h_sum[WIDTH/2 - dx - 1] + h_sum[WIDTH/2 - dx + 1];
+				if (left_val < 35*3) {
+					controller.left();
+					return;
+				}
+				int right_val = h_sum[WIDTH/2 + dx] + h_sum[WIDTH/2 + dx - 1] + h_sum[WIDTH/2 + dx + 1];
+				if (right_val < 35*3) {
+					controller.right();
+					return;
+				}
 			}
 		}
-		if (best_dx < 0)
-			controller.left(0);
-		if (best_dx > 0)
-			controller.right(0);
 	}
 }
